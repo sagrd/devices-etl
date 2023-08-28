@@ -16,7 +16,7 @@ Devices ETL
 
 
 ### Quality Issues:
-- When scheduling with sleep(), and when pulling data of past `X` duration; there could be issue with completeness of the data given the events on `devices` table are generated every miliseconds. This design may not account for the time required for transformation (and running code) which can cause data incompleteness. There are few ways to tackle this.
+- When scheduling with `sleep()` or with any `current_time` based approach , there could be issue with completeness of the data given the events on `devices` table are generated every miliseconds. This design may not account for the time required for transformation (and running code) which can cause data incompleteness. There are few ways to tackle this.
 1. When pulling the data, consider `max(extract_dt)` from `mysql table`. And pull everything after the resulatant timestamp. This should work as the `extract_dt` column is actually timestamp for latest row for `devices` data but not creation datetime of the row on `devices` table on `mysql`
 2. If 1 hr delay is acceptable, it might be a good idea to generate rows for `analytics` table grouping on `date and hour` fields of `devices` table. This should solve above mentioned issues and perhaps will be more intuitive in terms of interpreting results.
 

@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, BigInteger, DateTime
 from sqlalchemy.exc import OperationalError
 from sql_queries import EXTRACT_DATA_LAST_HOUR_QUERY
-from datetime import datetime
+from datetime import datetime,timedelta
 import json
 from geopy import distance
 
@@ -69,6 +69,9 @@ if __name__ == '__main__':
             sleep(0.1)
     print('Connection to Databases Successful.')
 
+    current_time = datetime.now()
     while True:
-        transform_load_data_last_hour(psql_engine,mysql_engine)
-        sleep(30)
+        current_time_plus_hour = current_time + timedelta(minutes=1)
+        if datetime.now() > current_time_plus_hour:
+            current_time = current_time_plus_hour
+            transform_load_data_last_hour(psql_engine,mysql_engine)

@@ -11,9 +11,6 @@ services:
       MYSQL_DATABASE: analytics
       MYSQL_USER: nonroot
       MYSQL_PASSWORD: nonroot
-    ports:
-      - "3306:3306"
-      - "33060:33060"
 
   psql_db:
     image: "postgres:9.5.15"
@@ -24,8 +21,6 @@ services:
       POSTGRES_DB: main
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
 
   main:
     build:

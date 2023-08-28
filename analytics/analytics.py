@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     current_time = datetime.now()
     while True:
-        current_time_plus_hour = current_time + timedelta(minutes=1)
+        current_time_plus_hour = current_time + timedelta(hours=1)
         if datetime.now() > current_time_plus_hour:
             current_time = current_time_plus_hour
             transform_load_data_last_hour(psql_engine,mysql_engine)

@@ -12,7 +12,7 @@ Devices ETL
 - `platform: linux/x86_64` added in mysql_db in `docker-compose.yml` to run the container in mac. The updated script should work on all unix based environments.
 
 ### Design:
-- Scheduling with using `sleep()` is not the best way to run the tasks at interval (see Quality Issues). One way of solving the problem scheduling is to run cronjob from `analytics` container. The container would stop after running the job once so we will need to find a way to keep the container running in the background. Even better way to achive this is by ocrastating the job via the `main` container - as the container wont be stopped because of `async loop` running forever (see `main.py`).
+- Scheduling from code is not the best way to run the tasks at interval (see Quality Issues). One way of solving the problem scheduling is to run cronjob from `analytics` container. The container would stop after running the job once so we will need to find a way to keep the container running in the background. Even better way to achive this is by ocrastating the job via the `main` container - as the container wont be stopped because of `async loop` running forever (see `main.py`).
 
 
 ### Quality Issues:

@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   mysql_db:
+    platform: linux/x86_64
     image: "mysql:8.0.27"  # we have the same version of mysql in the prod
     container_name: mysql56-container
     environment:
@@ -10,6 +11,9 @@ services:
       MYSQL_DATABASE: analytics
       MYSQL_USER: nonroot
       MYSQL_PASSWORD: nonroot
+    ports:
+      - "3306:3306"
+      - "33060:33060"
 
   psql_db:
     image: "postgres:9.5.15"
@@ -20,6 +24,8 @@ services:
       POSTGRES_DB: main
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
 
   main:
     build:

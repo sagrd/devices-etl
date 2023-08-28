@@ -45,28 +45,30 @@ def transform_load_data_last_hour(psql_engine, mysql_engine):
     transformed_data.to_sql('devices_agg_data', mysql_engine,if_exists='append', index = False)
     print("[INFO] Data Successfully Loaded to MySQL")
 
+if __name__ == '__main__':
+    print('Waiting for the data generator...')
+    sleep(20)
+    print('ETL Starting...')
 
-print('Waiting for the data generator...')
-sleep(20)
-print('ETL Starting...')
+    while True:
+        try:
+            psql_engine = create_engine(environ["POSTGRESQL_CS"], pool_pre_ping=True, pool_size=10)
+            mysql_engine = create_engine(environ["MYSQL_CS"], pool_pre_ping=True, pool_size=10)
+            metadata_obj = MetaData()
+            devices_agg_data = Table(
+                'devices_agg_data', metadata_obj,
+                Column('device_id', String(50)),
+                Column('max_temperature', Integer),
+                Column('count_data_points', Integer),
+                Column('total_distance_km', BigInteger),
+                Column('extract_dt', DateTime),
+            )
+            metadata_obj.create_all(mysql_engine)
+            break
+        except OperationalError:
+            sleep(0.1)
+    print('Connection to Databases Successful.')
 
-while True:
-    try:
-        psql_engine = create_engine(environ["POSTGRESQL_CS"], pool_pre_ping=True, pool_size=10)
-        mysql_engine = create_engine(environ["MYSQL_CS"], pool_pre_ping=True, pool_size=10)
-        metadata_obj = MetaData()
-        devices_agg_data = Table(
-            'devices_agg_data', metadata_obj,
-            Column('device_id', String(50)),
-            Column('max_temperature', Integer),
-            Column('count_data_points', Integer),
-            Column('total_distance_km', BigInteger),
-            Column('extract_dt', DateTime),
-        )
-        metadata_obj.create_all(mysql_engine)
-        break
-    except OperationalError:
-        sleep(0.1)
-print('Connection to Databases Successful.')
-
-transform_load_data_last_hour(psql_engine,mysql_engine)
+    while True:
+        transform_load_data_last_hour(psql_engine,mysql_engine)
+        sleep(30)
